@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conquer.CSharp", "Conquer.CSharp.csproj", "{B6E828F3-EFF3-EF2A-F3DF-D0309A9B8B16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conquer.CSharp.Editor", "Conquer.CSharp.Editor.csproj", "{C3781EC8-3DDE-CCAE-5FF3-26309A181C51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6E828F3-EFF3-EF2A-F3DF-D0309A9B8B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E828F3-EFF3-EF2A-F3DF-D0309A9B8B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E828F3-EFF3-EF2A-F3DF-D0309A9B8B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E828F3-EFF3-EF2A-F3DF-D0309A9B8B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3781EC8-3DDE-CCAE-5FF3-26309A181C51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3781EC8-3DDE-CCAE-5FF3-26309A181C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3781EC8-3DDE-CCAE-5FF3-26309A181C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3781EC8-3DDE-CCAE-5FF3-26309A181C51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
