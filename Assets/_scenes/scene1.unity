@@ -274,7 +274,7 @@ GameObject:
   - 198: {fileID: 274831997}
   - 199: {fileID: 274831996}
   m_Layer: 0
-  m_Name: MouseRightClick3
+  m_Name: Arrow3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1937,7 +1937,7 @@ GameObject:
   - 198: {fileID: 486675718}
   - 199: {fileID: 486675717}
   m_Layer: 0
-  m_Name: MouseRightClick1
+  m_Name: Arrow1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8495,7 +8495,7 @@ GameObject:
   - 198: {fileID: 1716429422}
   - 199: {fileID: 1716429421}
   m_Layer: 0
-  m_Name: MouseRightClick2
+  m_Name: Arrow2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8509,7 +8509,7 @@ Transform:
   m_GameObject: {fileID: 1716429419}
   m_LocalRotation: {x: 0.35355347, y: 0.6123725, z: 0.3535534, w: 0.6123724}
   m_LocalPosition: {x: 7.5, y: 0, z: 7.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9999999, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066576249}
   m_RootOrder: 1
@@ -10143,7 +10143,7 @@ GameObject:
   - 198: {fileID: 1980054385}
   - 199: {fileID: 1980054384}
   m_Layer: 0
-  m_Name: MouseRightClick4
+  m_Name: Arrow4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
