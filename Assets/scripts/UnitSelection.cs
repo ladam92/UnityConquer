@@ -5,27 +5,37 @@ public class UnitSelection : MonoBehaviour {
 
     private RaycastHit hit;
     private Vector3 mouseDownPointWorldSpace;
-    private Vector3 mouseUpPointWorldSpace;
     private Vector3 mouseCurentPointWorldSpace;
     private bool userIsDraggingMouse;
     private float timeLeftBeforeDeclareMouseDrag;
     private Vector2 mouseDragStartInScreenSpace;
+    private bool userIsFinishedDragging;
+
+    //GUI
+    private float dragBoxWidth;
+    private float dragBoxHeight;
+    private float dragBoxLeft;
+    private float dragBoxTop;
+    private Vector2 dragBoxStartPoint;
+    private Vector2 dragBoxFinishPoint;
 
     public static List<GameObject> CurrentlySelectedUnits = new List<GameObject>();
-    
+    public static List<GameObject> UnitsVisibleOnScreen = new List<GameObject>();
+    public static List<GameObject> UnitsInDragBox = new List<GameObject>();
+
     public float ClickOffset = 5.0f;
     public float DragOffset = 5.0f;
     public float TimeLimitBeforeDeclareMouseDrag = 1.0f;
     public GUIStyle MouseDragSkin;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         mouseDownPointWorldSpace = Vector3.zero;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -42,23 +52,23 @@ public class UnitSelection : MonoBehaviour {
             }
             else if (Input.GetMouseButton(0)) //controlKey
             {
-                if(!userIsDraggingMouse)
+                if (!userIsDraggingMouse)
                 {
                     timeLeftBeforeDeclareMouseDrag -= Time.deltaTime;
 
-                    if(timeLeftBeforeDeclareMouseDrag <= 0 || IsUserDraggingMouse(mouseDragStartInScreenSpace, Input.mousePosition))
+                    if (timeLeftBeforeDeclareMouseDrag <= 0 || IsUserDraggingMouse(mouseDragStartInScreenSpace, Input.mousePosition))
                     {
                         userIsDraggingMouse = true;
                     }
                 }
-
-                if(userIsDraggingMouse)
-                {
-                    Debug.Log("User is dragging");
-                }
             }
             else if (Input.GetMouseButtonUp(0)) //controlKey
             {
+                if(userIsDraggingMouse)
+                {
+                    userIsFinishedDragging = true;
+                }
+
                 timeLeftBeforeDeclareMouseDrag = 0;
                 userIsDraggingMouse = false;
             }
@@ -124,19 +134,89 @@ public class UnitSelection : MonoBehaviour {
                 }
             }
         }
-	}
+
+        CalculateDragBox();
+    }
+
+    void LateUpdate()
+    {
+        UnitsInDragBox.Clear();
+
+        if((userIsDraggingMouse || userIsFinishedDragging) && UnitsVisibleOnScreen.Count > 0)
+        {
+            UnitsVisibleOnScreen.ForEach(i => {
+
+                if (!UnitsInDragBox.Contains(i))
+                {
+                    if(IsUnitInsideDragBox(i))
+                    {
+                        UnitsInDragBox.Add(i);
+                        SetSelectionVisualizer(i, true);
+                    }
+                    else
+                    {
+                        if (!CurrentlySelectedUnits.Contains(i))
+                        {
+                            SetSelectionVisualizer(i, false);
+                        }
+                    }
+                }
+            });
+        }  
+
+        if(userIsFinishedDragging)
+        {
+            userIsFinishedDragging = false;
+            PutDraggedUnitsIntoCurrentlySelectedUnits();
+        }
+    }
 
     void OnGUI()
     {
 
         if (userIsDraggingMouse)
         {
-            var boxWidth = Camera.main.WorldToScreenPoint(mouseDownPointWorldSpace).x - Camera.main.WorldToScreenPoint(mouseCurentPointWorldSpace).x;
-            var boxHeight = Camera.main.WorldToScreenPoint(mouseDownPointWorldSpace).y - Camera.main.WorldToScreenPoint(mouseCurentPointWorldSpace).y;
-            var boxLeft = Input.mousePosition.x;
-            var boxTop = (Screen.height - Input.mousePosition.y) - boxHeight;
+            GUI.Box(new Rect(dragBoxLeft, dragBoxTop, dragBoxWidth, dragBoxHeight), "", MouseDragSkin);
+        }
+    }
 
-            GUI.Box(new Rect(boxLeft, boxTop, boxWidth, boxHeight), "", MouseDragSkin);
+    private void CalculateDragBox()
+    {
+        if (userIsDraggingMouse)
+        {
+            dragBoxWidth = Camera.main.WorldToScreenPoint(mouseDownPointWorldSpace).x - Camera.main.WorldToScreenPoint(mouseCurentPointWorldSpace).x;
+            dragBoxHeight = Camera.main.WorldToScreenPoint(mouseDownPointWorldSpace).y - Camera.main.WorldToScreenPoint(mouseCurentPointWorldSpace).y;
+            dragBoxLeft = Input.mousePosition.x;
+            dragBoxTop = (Screen.height - Input.mousePosition.y) - dragBoxHeight;
+
+            if (dragBoxWidth > 0)
+            {
+                if (dragBoxHeight > 0)
+                {
+                    //Box mouse point is bottom left
+                    dragBoxStartPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y + dragBoxHeight);
+                }
+                else
+                {
+                    //Box mouse point is top left
+                    dragBoxStartPoint = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                }
+            }
+            else
+            {
+                if (dragBoxHeight > 0)
+                {
+                    ///Box mouse point is bottom right
+                    dragBoxStartPoint = new Vector2(Input.mousePosition.x + dragBoxWidth, Input.mousePosition.y + dragBoxHeight);
+                }
+                else
+                {
+                    ///Box mouse point is top right
+                    dragBoxStartPoint = new Vector2(Input.mousePosition.x + dragBoxWidth, Input.mousePosition.y);
+                }
+            }
+
+            dragBoxFinishPoint = new Vector2(dragBoxStartPoint.x + Mathf.Abs(dragBoxWidth), dragBoxStartPoint.y - Mathf.Abs(dragBoxHeight));
         }
     }
 
@@ -154,7 +234,7 @@ public class UnitSelection : MonoBehaviour {
     {
         bool ret = false;
 
-        if((mouseDownPointWorldSpace.x < leftMousePoint.x + ClickOffset && mouseDownPointWorldSpace.x > leftMousePoint.x - ClickOffset) &&
+        if ((mouseDownPointWorldSpace.x < leftMousePoint.x + ClickOffset && mouseDownPointWorldSpace.x > leftMousePoint.x - ClickOffset) &&
             (mouseDownPointWorldSpace.y < leftMousePoint.y + ClickOffset && mouseDownPointWorldSpace.y > leftMousePoint.y - ClickOffset) &&
             (mouseDownPointWorldSpace.z < leftMousePoint.z + ClickOffset && mouseDownPointWorldSpace.z > leftMousePoint.z - ClickOffset))
         {
@@ -175,7 +255,7 @@ public class UnitSelection : MonoBehaviour {
 
     private void RemoveUnitFromCurentlySelectedUnits(GameObject unit)
     {
-        if(CurrentlySelectedUnits.Remove(unit))
+        if (CurrentlySelectedUnits.Remove(unit))
         {
             SetSelectionVisualizer(unit, false);
         }
@@ -184,6 +264,7 @@ public class UnitSelection : MonoBehaviour {
     private void SetSelectionVisualizer(GameObject unit, bool active)
     {
         unit.transform.FindChild("SelectionVisualizer").gameObject.SetActive(active);
+        unit.GetComponent<UnitScreenVisibility>().IsVisibleOnScreen = active;
     }
 
     private bool IsShiftKeysDown()
@@ -201,7 +282,7 @@ public class UnitSelection : MonoBehaviour {
     {
         bool ret = false;
 
-        if((NewPoint.x > DragStart.x + DragOffset || NewPoint.x < DragStart.x - DragOffset) &&
+        if ((NewPoint.x > DragStart.x + DragOffset || NewPoint.x < DragStart.x - DragOffset) &&
             (NewPoint.y > DragStart.y + DragOffset || NewPoint.y < DragStart.y - DragOffset))
         {
             ret = true;
@@ -209,4 +290,53 @@ public class UnitSelection : MonoBehaviour {
 
         return ret;
     }
+
+    public static bool IsUnitVisibleOnScreen(GameObject unit)
+    {
+        bool ret = false;
+        Vector2 unitScreenPosition = Camera.main.WorldToScreenPoint(unit.transform.position);
+
+        if (unitScreenPosition.x < Screen.width && unitScreenPosition.y < Screen.height &&
+            unitScreenPosition.x > 0 && unitScreenPosition.y > 0)
+        {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    private bool IsUnitInsideDragBox(GameObject unit)
+    {
+        bool ret = false;
+        Vector2 unitScreenPosition = Camera.main.WorldToScreenPoint(unit.transform.position);
+
+        if (unitScreenPosition.x > dragBoxStartPoint.x && unitScreenPosition.y < dragBoxStartPoint.y &&
+            unitScreenPosition.x < dragBoxFinishPoint.x && unitScreenPosition.y > dragBoxFinishPoint.y)
+        {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    private void PutDraggedUnitsIntoCurrentlySelectedUnits()
+    {
+        bool isShiftKeysDown = IsShiftKeysDown();
+
+        if(!isShiftKeysDown)
+        {
+            DeselectUnitsIfSelected();
+        }
+
+        UnitsInDragBox.ForEach(i =>
+        {
+            if (!CurrentlySelectedUnits.Contains(i))
+            {
+                AddNewUnitToCurrentlySelectedUnits(i);
+            }
+        });
+
+        UnitsInDragBox.Clear();
+    }
+
 }

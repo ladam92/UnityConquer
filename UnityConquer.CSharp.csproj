@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\RTS_Camera.cs" />
+    <Compile Include="Assets\Scripts\UnitScreenVisibility.cs" />
+    <Compile Include="Assets\Scripts\UnitSelection.cs" />
     <Compile Include="Assets\imports\RTS_Camera\Demo\DemoScene.cs" />
     <Compile Include="Assets\imports\RTS_Camera\Demo\TargetSelector.cs" />
     <Compile Include="Assets\imports\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
@@ -207,7 +209,6 @@
     <Compile Include="Assets\imports\Standard Assets\Vehicles\Car\Scripts\SkidTrail.cs" />
     <Compile Include="Assets\imports\Standard Assets\Vehicles\Car\Scripts\Suspension.cs" />
     <Compile Include="Assets\imports\Standard Assets\Vehicles\Car\Scripts\WheelEffects.cs" />
-    <Compile Include="Assets\prefabs\scripts\UnitSelection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\imports\SampleScenes\Shaders\Skybox-Procedural.shader" />

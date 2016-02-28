@@ -1901,7 +1901,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11455738, guid: 407bd5cbe8c43334bb1b25c0f3826974, type: 2}
       propertyPath: minHeight
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 11455738, guid: 407bd5cbe8c43334bb1b25c0f3826974, type: 2}
       propertyPath: keyboardMovementSpeed
@@ -1938,6 +1938,10 @@ Prefab:
     - target: {fileID: 2056488, guid: 407bd5cbe8c43334bb1b25c0f3826974, type: 2}
       propertyPath: near clip plane
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11455738, guid: 407bd5cbe8c43334bb1b25c0f3826974, type: 2}
+      propertyPath: screenEdgeMovementSpeed
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 407bd5cbe8c43334bb1b25c0f3826974, type: 2}
@@ -6802,6 +6806,42 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 957363788}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &998358579 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 107700, guid: fd80ad329ee674b4fa62db4cab79ffb6, type: 2}
+  m_PrefabInternal: {fileID: 52616982}
+--- !u!114 &998358581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 998358579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38277bb67e16f54ab49ccb328110aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenSpacePos: {x: 0, y: 0}
+  IsVisibleOnScreen: 0
+  IsSelected: 0
+--- !u!1 &1045261095 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 107700, guid: fd80ad329ee674b4fa62db4cab79ffb6, type: 2}
+  m_PrefabInternal: {fileID: 94496689}
+--- !u!114 &1045261097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1045261095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38277bb67e16f54ab49ccb328110aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenSpacePos: {x: 0, y: 0}
+  IsVisibleOnScreen: 0
+  IsSelected: 0
 --- !u!1 &1066576248
 GameObject:
   m_ObjectHideFlags: 0
@@ -6834,6 +6874,24 @@ Transform:
   - {fileID: 957363789}
   m_Father: {fileID: 1763143765}
   m_RootOrder: 1
+--- !u!1 &1306188835 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 107700, guid: fd80ad329ee674b4fa62db4cab79ffb6, type: 2}
+  m_PrefabInternal: {fileID: 1828528330}
+--- !u!114 &1306188837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1306188835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38277bb67e16f54ab49ccb328110aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenSpacePos: {x: 0, y: 0}
+  IsVisibleOnScreen: 0
+  IsSelected: 0
 --- !u!1 &1337621877
 GameObject:
   m_ObjectHideFlags: 0
