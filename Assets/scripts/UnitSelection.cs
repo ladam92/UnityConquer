@@ -10,6 +10,7 @@ public class UnitSelection : MonoBehaviour {
     private float timeLeftBeforeDeclareMouseDrag;
     private Vector2 mouseDragStartInScreenSpace;
     private bool userIsFinishedDragging;
+    private bool userIsStartedDragging;
 
     //GUI
     private float dragBoxWidth;
@@ -31,7 +32,6 @@ public class UnitSelection : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        mouseDownPointWorldSpace = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -49,6 +49,7 @@ public class UnitSelection : MonoBehaviour {
                 mouseDownPointWorldSpace = hit.point;
                 timeLeftBeforeDeclareMouseDrag = TimeLimitBeforeDeclareMouseDrag;
                 mouseDragStartInScreenSpace = Input.mousePosition;
+                userIsStartedDragging = true;
             }
             else if (Input.GetMouseButton(0)) //controlKey
             {
@@ -69,7 +70,6 @@ public class UnitSelection : MonoBehaviour {
                     userIsFinishedDragging = true;
                 }
 
-                timeLeftBeforeDeclareMouseDrag = 0;
                 userIsDraggingMouse = false;
             }
 
@@ -86,13 +86,14 @@ public class UnitSelection : MonoBehaviour {
                 {
                     if (Input.GetMouseButtonUp(0) && DidUserClickleftMouse(hit.point)) //controlKey
                     {
+                        //TODO instead of checking the existance of SelectionVisualizer use other means (does it have a component named Unit?)
                         if (hit.collider.transform.parent != null && hit.collider.transform.parent.FindChild("SelectionVisualizer"))
                         {
                             GameObject parentObject = hit.collider.transform.parent.gameObject;
 
                             if (!CurrentlySelectedUnits.Contains(parentObject))
                             {
-                                bool isShiftKeysDown = IsShiftKeysDown();
+                                bool isShiftKeysDown = HelperMethods.IsShiftKeysDown();
 
                                 if (isShiftKeysDown)
                                 {
@@ -106,7 +107,7 @@ public class UnitSelection : MonoBehaviour {
                             }
                             else
                             {
-                                bool isShiftKeysDown = IsShiftKeysDown();
+                                bool isShiftKeysDown = HelperMethods.IsShiftKeysDown();
 
                                 if (isShiftKeysDown)
                                 {
@@ -136,6 +137,13 @@ public class UnitSelection : MonoBehaviour {
         }
 
         CalculateDragBox();
+
+        if (!HelperMethods.IsShiftKeysDown() && userIsStartedDragging && userIsDraggingMouse)
+        {
+            //At selection start we delete the currently selected units array if shift key is not pressed
+            DeselectUnitsIfSelected();
+            userIsStartedDragging = false;
+        }
     }
 
     void LateUpdate()
@@ -222,7 +230,7 @@ public class UnitSelection : MonoBehaviour {
 
     private void DeselectUnitsIfNoShiftKeysPressed()
     {
-        bool isShiftKeysDown = IsShiftKeysDown();
+        bool isShiftKeysDown = HelperMethods.IsShiftKeysDown();
 
         if (!isShiftKeysDown)
         {
@@ -265,11 +273,6 @@ public class UnitSelection : MonoBehaviour {
     {
         unit.transform.FindChild("SelectionVisualizer").gameObject.SetActive(active);
         unit.GetComponent<UnitScreenVisibility>().IsVisibleOnScreen = active;
-    }
-
-    private bool IsShiftKeysDown()
-    {
-        return Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift); //controlKey
     }
 
     private void AddNewUnitToCurrentlySelectedUnits(GameObject unit)
@@ -321,13 +324,6 @@ public class UnitSelection : MonoBehaviour {
 
     private void PutDraggedUnitsIntoCurrentlySelectedUnits()
     {
-        bool isShiftKeysDown = IsShiftKeysDown();
-
-        if(!isShiftKeysDown)
-        {
-            DeselectUnitsIfSelected();
-        }
-
         UnitsInDragBox.ForEach(i =>
         {
             if (!CurrentlySelectedUnits.Contains(i))

@@ -63,7 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\HelperMethods.cs" />
     <Compile Include="Assets\Scripts\RTS_Camera.cs" />
+    <Compile Include="Assets\Scripts\Rotate.cs" />
     <Compile Include="Assets\Scripts\UnitScreenVisibility.cs" />
     <Compile Include="Assets\Scripts\UnitSelection.cs" />
     <Compile Include="Assets\imports\RTS_Camera\Demo\DemoScene.cs" />
