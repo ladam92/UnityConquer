@@ -47,12 +47,22 @@ public class UnitPathFinding : MonoBehaviour {
     {
         if (Path != null &&currentWaypoint < Path.vectorPath.Count && unit.IsMoveable)
         {
-            Vector3 direction = Path.vectorPath[currentWaypoint] - transform.FindChild("Model").transform.position;
+            var modelTransform = transform.FindChild("Model").transform;
+            Vector3 direction = Path.vectorPath[currentWaypoint] - modelTransform.position;
             direction = direction.normalized * Speed * Time.fixedDeltaTime;
 
+            Vector3 lookAtPos = new Vector3(Path.vectorPath[currentWaypoint].x, modelTransform.position.y, Path.vectorPath[currentWaypoint].z);
+            modelTransform.LookAt(lookAtPos);
+            
             characterController.SimpleMove(direction);
 
-            if(Vector3.Distance(transform.position, Path.vectorPath[currentWaypoint]) < NextWaypointDistance)
+            var nextWaypointDistance = NextWaypointDistance;
+            if (currentWaypoint == Path.vectorPath.Count - 1)
+            {
+                nextWaypointDistance = 0;
+            }
+
+            if(Vector3.Distance(modelTransform.position, Path.vectorPath[currentWaypoint]) < nextWaypointDistance)
             {
                 currentWaypoint++;
             }
