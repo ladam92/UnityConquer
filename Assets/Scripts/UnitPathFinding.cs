@@ -6,12 +6,14 @@ public class UnitPathFinding : MonoBehaviour {
 
     public Path Path;
     public float Speed;
+    public float NextWaypointDistance = 10f;
+    public float StopRunningDistance = 1f;
 
     private Seeker seeker;
     private CharacterController characterController;
     private int currentWaypoint = 0;
     private Unit unit;
-    private float NextWaypointDistance = 10f;
+    
 
 
     // Use this for initialization
@@ -47,6 +49,8 @@ public class UnitPathFinding : MonoBehaviour {
     {
         if (Path != null &&currentWaypoint < Path.vectorPath.Count && unit.IsMoveable)
         {
+            unit.IsRunning = true;
+
             var modelTransform = transform.FindChild("Model").transform;
             Vector3 direction = Path.vectorPath[currentWaypoint] - modelTransform.position;
             direction = direction.normalized * Speed * Time.fixedDeltaTime;
@@ -65,6 +69,11 @@ public class UnitPathFinding : MonoBehaviour {
             if(Vector3.Distance(modelTransform.position, Path.vectorPath[currentWaypoint]) < nextWaypointDistance)
             {
                 currentWaypoint++;
+            }
+
+            if(Vector3.Distance(modelTransform.position, Path.vectorPath[Path.vectorPath.Count - 1]) < StopRunningDistance)
+            {
+                unit.IsRunning = false;
             }
         }
     }

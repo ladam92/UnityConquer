@@ -8,9 +8,23 @@ public class Unit : MonoBehaviour {
     public bool IsSelected;
     public bool IsMoveable = true;
 
+    public bool IsRunning
+    {
+        get
+        {
+            return animator.GetBool("IsRunnig");
+        }
+        set
+        {
+            animator.SetBool("IsRunning", value);
+        }
+    }
+
+    private Animator animator;
+
 	// Use this for initialization
 	void Start () {
-	
+        animator = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
